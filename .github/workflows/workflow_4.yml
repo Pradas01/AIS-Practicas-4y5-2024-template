@@ -1,0 +1,38 @@
+name: Workflow 4 - Nightly system tests on production branch
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Every night at midnight
+  workflow_dispatch: 
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+            fail-fast: false
+            matrix:
+              os: [ macos-latest, windows-latest, ubuntu-latest ]    
+    steps:
+          - uses: actions/checkout@v3
+          - name: Set up JDK 17
+          
+            uses: actions/setup-java@v2
+            with:
+              distribution: 'adopt'
+              java-version: '17'
+        
+          - name: Checkout code
+            uses: actions/checkout@v2
+            
+          - name: Run nightly system tests
+            run: mvn -Dtest=FilmUITest test
+
+          - name: Run system tests firefox
+            run: mvn -Dtest=FilmUITestfirefox test
+
+          - name: Run system tests Safary
+            run: mvn -Dtest=FilmUITestSafari test
+            if: matrix.os == 'macos-latest' # Ejecutar solo en mac
+
+          - name: Run system tests Edge
+            run: mvn -Dtest=FilmUITestEdge test
+            if: matrix.os == 'windows-latest' # Ejecutar solo en Windows
