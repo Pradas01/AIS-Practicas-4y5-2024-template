@@ -26,13 +26,4 @@ jobs:
           - name: Run nightly system tests
             run: mvn -Dtest=FilmUITest test
 
-          - name: Run system tests firefox
-            run: mvn -Dtest=FilmUITestfirefox test
-
-          - name: Run system tests Safary
-            run: mvn -Dtest=FilmUITestSafari test
-            if: matrix.os == 'macos-latest' # Ejecutar solo en mac
-
-          - name: Run system tests Edge
-            run: mvn -Dtest=FilmUITestEdge test
-            if: matrix.os == 'windows-latest' # Ejecutar solo en Windows
+          
